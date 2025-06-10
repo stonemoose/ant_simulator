@@ -14,17 +14,16 @@
     let innerHeight: number = $state(0);
     let innerWidth: number = $state(0);
     let ruleString = $state("LLRR");
-    let running = $state(false);
+    let running = $state(true);
     let steps = $state(0);
     let open: boolean = $state(false);
     let keyCapture: boolean = $state(true);
 
     const gridSize: number = 512;
-    let minCellSize: number = $state(1);
+    let minCellSize: number = $state(0);
     const maxCellSize: number = $derived(minCellSize * 64);
 
-    // svelte-ignore state_referenced_locally
-    let cellSize: number = $state(maxCellSize);
+    let cellSize: number = $state(0);
     let antGrid: AntGrid;
     let trouchetTiles: boolean = $state(false);
     let hotTiles: boolean = $state(false);
@@ -317,15 +316,6 @@
         }
     };
 
-    const onkeyup = (event: KeyboardEvent) => {
-        if (keyCapture) {
-            switch (event.key) {
-                case "ctrl":
-                    increaseCell;
-            }
-        }
-    };
-
     const increaseCell = (event: MouseEvent) => {
         const middle = (gridSize - 1) / 2;
         const y = Math.round(
@@ -343,6 +333,7 @@
     onMount(() => {
         context = canvas!.getContext("2d")!;
         minCellSize = Math.round(Math.min(innerHeight, innerWidth) / gridSize);
+        cellSize = maxCellSize;
         resetGrid();
     });
 </script>
@@ -367,14 +358,24 @@
 
     <p>Total steps: {steps.toLocaleString("en")}</p>
     <Button onclick={resetGrid}>Reset grid</Button>
+    <Button
+        class="w-20"
+        onclick={() => {
+            running = !running;
+        }}
+    >
+        {#if running}
+            Play
+        {:else}
+            Pause
+        {/if}
+    </Button>
 </Modal>
 
 <canvas
     onclick={increaseCell}
     class="absolute w-full h-full"
     bind:this={canvas}
-    width=""
-    height=""
     style="pointer-events: auto;"
 ></canvas>
 
@@ -386,7 +387,7 @@
     <AdjustmentsHorizontalOutline class="h-6 w-6" />
 </Button>
 
-<svelte:window {onkeydown} {onkeyup} bind:innerHeight bind:innerWidth />
+<svelte:window {onkeydown} bind:innerHeight bind:innerWidth />
 
 <style>
 </style>
