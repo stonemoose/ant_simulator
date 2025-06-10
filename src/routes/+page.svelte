@@ -23,7 +23,8 @@
     let minCellSize: number = $state(0);
     const maxCellSize: number = $derived(minCellSize * 64);
 
-    let cellSize: number = $state(0);
+    // svelte-ignore state_referenced_locally
+    let cellSize: number = $state(maxCellSize);
     let antGrid: AntGrid;
     let trouchetTiles: boolean = $state(false);
     let hotTiles: boolean = $state(false);
