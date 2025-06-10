@@ -20,7 +20,7 @@
     let keyCapture: boolean = $state(true);
 
     const gridSize: number = 512;
-    let minCellSize: number = $state(0);
+    let minCellSize: number = $state(1);
     const maxCellSize: number = $derived(minCellSize * 64);
 
     // svelte-ignore state_referenced_locally
