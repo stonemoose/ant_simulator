@@ -85,6 +85,7 @@
     };
     const newRule = (rule: string) => {
         ruleString = rule.toUpperCase();
+        resetGrid();
     };
     onMount(() => {
         minCellSize = Math.floor(
